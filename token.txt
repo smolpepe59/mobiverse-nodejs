@@ -1,1 +1,1 @@
-user=%7B%22id%22%3A1992036023%2C%22first_name%22%3A%22_1026.%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22potatochipsdyp%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-1615416951880140061&chat_type=channel&start_param=Mobiverse_6245303632&auth_date=1720450811&hash=370b7faec4f07a4ac622205f166ca21f087d13cb251710b048af6b7a225e42a6
+user=
