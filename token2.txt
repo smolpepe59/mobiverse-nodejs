@@ -1,1 +1,1 @@
-user=%7B%22id%22%3A6245303632%2C%22first_name%22%3A%22kritomanggo%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22kritomanggo%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-1615416951880140061&chat_type=channel&start_param=Mobiverse_6245303632&auth_date=1720459997&hash=e7a5636c4c737fa968a90f480329759bf29fb6040d0e0a5e06007c055891d4af
+user=
