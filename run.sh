@@ -4,7 +4,7 @@ node utils.js
 
 BASE_SESSION_NAME="mobi-nodejs"
 
-for i in {0..2}; do
+for ((i = 1; i <= 3; i++)); do
     SESSION_NAME="${BASE_SESSION_NAME}${i}"
 
     if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
@@ -24,7 +24,7 @@ for i in {0..2}; do
     tmux send-keys -t "$SESSION_NAME" 'cd /home/ubuntu/mobiverse-nodejs' Enter
     tmux send-keys -t "$SESSION_NAME" 'node index.js' Enter
 
-    echo "Iteration $((i + 1)) completed, session $SESSION_NAME created and command sent."
+    echo "Iteration $i completed, session $SESSION_NAME created and command sent."
 done
 
 echo "All iterations completed."
