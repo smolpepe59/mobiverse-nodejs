@@ -7,18 +7,11 @@ const statusFilePath = path.join(__dirname, 'status.txt');
 
 // Function to get the first file not listed in status.txt
 function getTokenName() {
-    console.log(tokenDir)
-    // Read status.txt to get the list of filenames
     const statusTextContent = fs.readFileSync
         (statusFilePath, 'utf8').trim();
-    console.log(statusTextContent)
+
     const statusFileNames = statusTextContent.split('\n').map(file => file.trim());
-
-    console.log(statusFileNames)
-    // Get the list of files in the current directory
     const files = fs.readdirSync(tokenDir);
-
-    console.log(files)
     // Find the first file not listed in status.txt
     for (const file of files) {
         if (!statusFileNames.includes(file) && file !== 'status.txt') {
@@ -27,7 +20,7 @@ function getTokenName() {
         }
     }
 
-    return null; // Return null if no such file is found
+    return null;
 }
 
 // const tokenName = 'token.txt';
@@ -42,7 +35,6 @@ const headers = {
     'Authorization': authToken,
     'Content-Type': 'application/json'
 };
-
 
 
 // Example usage of getTokenName
