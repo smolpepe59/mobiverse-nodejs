@@ -107,7 +107,6 @@ async function activateFever() {
     }
 }
 
-// Function to spin the wheel
 async function spinWheel() {
     const url = baseURL + '/wheel/spin';
     try {
@@ -115,8 +114,9 @@ async function spinWheel() {
         const { newUserData, prize, prizeValue } = response.data;
 
         // Check if newUserData and prize exist and are not null
-        if (newUserData && prize && prize.value && prize.name) {
-            console.log(getFormattedDateTime() + ` Spin Success | Remaining Diamonds: ${newUserData.diamond || 0} | Reward: ${prize.value} ${prize.name}`);
+        if (newUserData && prize && (prize.value || prizeValue) && prize.name) {
+            const prizeVal = prize.value || prizeValue; // Use prize.value if defined, otherwise use prizeValue
+            console.log(getFormattedDateTime() + ` Spin Success | Remaining Diamonds: ${newUserData.diamond || 0} | Reward: ${prizeVal} ${prize.name}`);
         } else if (newUserData && prize) {
             console.log(getFormattedDateTime() + ` Spin Success | Remaining Diamonds: ${newUserData.diamond || 0} | Reward: ${prize.rewardValue} ${prize.rewardType}`);
         } else {
