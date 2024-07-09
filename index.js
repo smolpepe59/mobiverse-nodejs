@@ -2,8 +2,39 @@ const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 
+const tokenDir = path.join(__dirname, "tokens");
+const statusFilePath = path.join(__dirname, 'status.txt');
+
+// Function to get the first file not listed in status.txt
+function getTokenName() {
+    console.log(tokenDir)
+    // Read status.txt to get the list of filenames
+    const statusTextContent = fs.readFileSync
+        (statusFilePath, 'utf8').trim();
+    console.log(statusTextContent)
+    const statusFileNames = statusTextContent.split('\n').map(file => file.trim());
+
+    console.log(statusFileNames)
+    // Get the list of files in the current directory
+    const files = fs.readdirSync(tokenDir);
+
+    console.log(files)
+    // Find the first file not listed in status.txt
+    for (const file of files) {
+        if (!statusFileNames.includes(file) && file !== 'status.txt') {
+            console.log(file)
+            return file;
+        }
+    }
+
+    return null; // Return null if no such file is found
+}
+
+// const tokenName = 'token.txt';
+const tokenFileName = getTokenName();
+
 // Path to the token file and read the token
-const tokenPath = path.join(__dirname, 'token.txt');
+const tokenPath = path.join(tokenDir, tokenFileName);
 const authToken = 'Bearer ' + fs.readFileSync(tokenPath, 'utf8').trim();
 
 const baseURL = 'https://mobiverse-backend-prod-c4gljf5eva-uc.a.run.app';
@@ -12,33 +43,37 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+
+
+// Example usage of getTokenName
+function appendTokenToStatus(tokenFileName) {
+    const statusFilePath = path.join(__dirname, 'status.txt');
+
+    try {
+        let statusTextContent = fs.readFileSync(statusFilePath, 'utf8').trim();
+
+        if (!statusTextContent.includes(tokenFileName)) {
+            statusTextContent += '\n' + tokenFileName;
+            fs.writeFileSync(statusFilePath, statusTextContent);
+            console.log(`Successfully appended ${tokenFileName} to status.txt`);
+        } else {
+            console.log(`${tokenFileName} already exists in status.txt`);
+        }
+    } catch (error) {
+        console.error('Failed to append token to status.txt:', error.message);
+    }
+}
+
 // Function to get the current formatted date and time
 function getFormattedDateTime() {
-  const now = new Date();
-  
-  // Create an Intl.DateTimeFormat object with the desired format and locale
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Asia/Manila', // Set the desired time zone to the Philippines
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour12: false // Use 24-hour time
-  });
-
-  // Format the date and time using the formatter
-  const formattedDateParts = formatter.formatToParts(now);
-
-  // Extract the formatted parts into a dictionary for easy access
-  const dateParts = {};
-  formattedDateParts.forEach(({ type, value }) => {
-    dateParts[type] = value;
-  });
-
-  // Construct the formatted date-time string
-  return `[${dateParts.hour}:${dateParts.minute}:${dateParts.second}, ${dateParts.day}/${dateParts.month}/${dateParts.year}]`;
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const year = now.getFullYear();
+    return `[${hours}:${minutes}:${seconds}, ${day}/${month}/${year}]`;
 }
 
 // Function to create a delay
@@ -50,6 +85,13 @@ function delay(ms) {
 async function getUserInfo() {
     try {
         const response = await axios.get(baseURL + '/users', { headers: headers });
+
+        if (tokenFileName) {
+            appendTokenToStatus(tokenFileName);
+        } else {
+            console.log('No token file found to append to status.txt');
+        }
+
         return response.data;
     } catch (error) {
         console.error(getFormattedDateTime() + " Failed to retrieve user info: " + (error.response ? error.response.message : error.message));
